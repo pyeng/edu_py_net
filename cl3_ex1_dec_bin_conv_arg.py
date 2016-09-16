@@ -25,7 +25,5 @@ for i in octets:
 	binary.append(i)
 	bin_oct = ".".join(binary)
 
-#print bin_oct
-
 print "\n%-20s %-20s" % ("IP address", "Binary")
 print "%-20s %-20s\n" % (ip_addr, bin_oct)
