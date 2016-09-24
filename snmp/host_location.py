@@ -10,4 +10,4 @@ snmp_data = snmp_get_oid(a_device, oid='1.3.6.1.2.1.1.5.0', display_errors=True)
 
 output = snmp_extract(snmp_data)
 
-print output
+print "%s, %s" % (a_device, output)
