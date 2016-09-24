@@ -2,7 +2,7 @@
 
 from snmp_helper import snmp_get_oid,snmp_extract
 
-switch = (192.168.12.1,	192.168.12.90, 192.168.12.42, 192.168.12.101)
+switch = [192.168.12.1,	192.168.12.90, 192.168.12.42, 192.168.12.101]
 
 COMMUNITY_STRING = 'SnNeMtP'
 SNMP_PORT = 161
