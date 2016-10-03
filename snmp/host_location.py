@@ -9,9 +9,7 @@ if len(sys.argv) != 2:
 	sys.exit("Usage: ./host_location.py <SNMP Community>")
 
 switch = (
-    "192.168.12.1",
-    "192.168.12.2",
-    "192.168.12.3",
+   "192.168.12.5",
     )
 
 COMMUNITY_STRING = sys.argv.pop()
@@ -25,4 +23,7 @@ for i in switch:
 	hostname = snmp_extract(snmp_hostname).strip()
 	location = snmp_extract(snmp_location)
 
-	print "%-15s %-8s %-8s" % (i, hostname, location)
+	location = ((location.replace(",", ".")).replace("..",".")).replace("/", "-")
+	new_host = hostname + "_" + location
+	print new_host
+	#print "%s %s_%s" % (i, hostname, location)
