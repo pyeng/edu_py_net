@@ -4,9 +4,10 @@ import os
 import multiprocessing
 import subprocess
 import ipaddress
+import re
 from snmp_helper import snmp_get_oid,snmp_extract
 
-manag_net = ipaddress.ip_network(u"192.168.20.64/29")
+manag_net = ipaddress.ip_network(u"192.168.21.0/26")
 
 DNULL = open(os.devnull, 'w')
 
@@ -41,26 +42,19 @@ def worker(manag_net):
     processes = []
     for device in manag_net.hosts():
     	device = str(device)
-    	
-        p = multiprocessing.Process(target=ping, args=(device, mp_queue))
-        processes.append(p)
-        p.start()
+    	gw = re.search(r"(\.1)$", device)
+        if gw:
+            print "gw"
+        else:
+            p = multiprocessing.Process(target=ping, args=(device, mp_queue))
+            processes.append(p)
+            p.start()
     for p in processes:
         p.join()
     results = {True:[], False:[]}
     for p in processes:
-        key, value =  mp_queue.get()
-        results[key] += [value]
+       key, value =  mp_queue.get()
+       results[key] += [value]
     return results[True], results[False]
 
 success, failed = worker(manag_net)
-
-#success = worker(manag_net)
-"""
->>> addr4 = ipaddress.ip_address(u"192.168.2.1")
->>> addr4 in net4
-True
-
->>> str(addr4)
-'192.168.2.1'
-"""
