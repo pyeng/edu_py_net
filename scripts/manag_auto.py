@@ -17,6 +17,7 @@ oid_location = ".1.3.6.1.2.1.1.6.0"
 DNULL = open(os.devnull, 'w')
 
 inventory = "inventory%s.yml" % str(manag_net).split(".")[2]
+dict_inv = {}
 
 def data_from_snmp(switch_ip, oid):
     COMMUNITY_STRING = 'SnNeMtP'
@@ -31,16 +32,20 @@ def data_from_snmp(switch_ip, oid):
 def action(host,mp_queue):
     response = subprocess.call(["ping", "-c", "2", "-w", '2', host], stdout=DNULL)
     if response == 0:
-        f = open(inventory, "a")
+        #f = open(inventory, "a")
     	hostname = data_from_snmp(host, oid_hostname)
         location = data_from_snmp(host, oid_location)
         vendor = data_from_snmp(host, oid_model)
         #print host, hostname, location, vendor
-        item = "\n%s:\n%8s%s\n%11s%s\n" % (hostname, "ip: ", host, "model: ", vendor)
-        f.write(item)
-        if
-        f.close()
+        dict_inv[hostname] = {}
+        dict_inv[hostname]["ip"] = host
+        dict_inv[hostname]["model"] = vendor
+        dict_inv[hostname]["location"] = location
+        #item = "\n%s:\n%8s%s\n%11s%s\n" % (hostname, "ip: ", host, "model: ", vendor)
+        #f.write(item)
+        #f.close()
         result = True
+        print dict_inv
     else:
         #print host, 'is down!'
         result = False
@@ -71,3 +76,4 @@ def worker(manag_net):
 
 
 success, failed = worker(manag_net)
+print dict_inv
